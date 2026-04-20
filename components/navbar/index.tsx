@@ -4,10 +4,20 @@ import { Search } from "./search";
 import { MobileNav } from "./mobile-nav";
 import AuthStatus from "@/components/auth-status";
 import { ThemeToggle } from "./theme-toggle";
-import { getCachedNavbarCategories } from "@/lib/cache";
+import prisma from "@/lib/prisma";
+
+async function getCategories() {
+  try {
+    return await prisma.category.findMany({
+      orderBy: { name: "asc" },
+    });
+  } catch {
+    return [];
+  }
+}
 
 export async function Navbar() {
-  const categories = await getCachedNavbarCategories();
+  const categories = await getCategories();
 
   return (
     <header className="top-0 right-0 left-0 z-50 fixed bg-background/95 supports-backdrop-filter:bg-background/60 backdrop-blur border-b h-16">

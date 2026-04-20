@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/field";
 import { Loader2 } from "lucide-react";
 import DOMPurify from "dompurify";
+import { toast } from "sonner";
 
 export default function EditPostPage() {
   const router = useRouter();
@@ -69,7 +70,7 @@ export default function EditPostPage() {
 
   async function handleSubmit(published: boolean) {
     if (published && !categoryId) {
-      alert("Please select a category before publishing");
+      toast.error("Please select a category before publishing");
       return;
     }
 
@@ -103,11 +104,18 @@ export default function EditPostPage() {
       } else {
         router.push("/posts/manage");
       }
+      toast.success(
+        published
+          ? "Article published successfully"
+          : "Draft saved successfully",
+      );
 
       router.refresh();
     } catch (error) {
       console.error(error);
-      alert(error instanceof Error ? error.message : "Something went wrong");
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong",
+      );
     } finally {
       setIsLoading(false);
     }

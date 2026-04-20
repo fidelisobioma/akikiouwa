@@ -17,6 +17,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import DOMPurify from "dompurify";
+import { toast } from "sonner";
 
 export default function NewPostPage() {
   const DRAFT_KEY = "akikouwa-post-draft";
@@ -73,7 +74,7 @@ export default function NewPostPage() {
   async function handleSubmit(published: boolean) {
     // validate category if publishing
     if (published && !categoryId) {
-      alert("Please select a category before publishing");
+      toast.error("Please select a category before publishing");
       return;
     }
 
@@ -111,11 +112,17 @@ export default function NewPostPage() {
       } else {
         router.push("/posts/manage");
       }
-
+      toast.success(
+        published
+          ? "Article published successfully"
+          : "Draft saved successfully",
+      );
       router.refresh();
     } catch (error) {
       console.error(error);
-      alert(error instanceof Error ? error.message : "Something went wrong");
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong",
+      );
     } finally {
       setIsLoading(false);
     }

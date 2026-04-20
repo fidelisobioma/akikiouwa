@@ -20,6 +20,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
+import { toast } from "sonner";
 
 const CreateCategorySchema = z.object({
   name: z
@@ -102,11 +103,12 @@ export function CategoryDialog({
 
       if (!res.ok) throw new Error(data.error);
 
+      toast.success("Category created successfully");
       createForm.reset();
       onOpenChange(false);
       onSuccess();
     } catch (error) {
-      setServerError(
+      toast.error(
         error instanceof Error ? error.message : "Something went wrong",
       );
     } finally {
@@ -129,11 +131,12 @@ export function CategoryDialog({
 
       if (!res.ok) throw new Error(data.error);
 
+      toast.success("Category updated successfully");
       editForm.reset();
       onOpenChange(false);
       onSuccess();
     } catch (error) {
-      setServerError(
+      toast.error(
         error instanceof Error ? error.message : "Something went wrong",
       );
     } finally {

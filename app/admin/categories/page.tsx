@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { CategoryDialog } from "@/components/admin/category-dialog";
 import { Pencil, Trash2, Plus, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Category {
   id: string;
@@ -79,10 +80,14 @@ export default function ManageCategoriesPage() {
 
       if (!res.ok) throw new Error(data.error);
 
+      toast.success("Category deleted successfully");
       setDeleteCategory(null);
       fetchCategories();
     } catch (error) {
       console.error("Failed to delete category:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong",
+      );
     } finally {
       setIsDeleting(false);
     }

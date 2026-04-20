@@ -24,6 +24,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Loader2, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 
 const UpdateProfileSchema = z.object({
   name: z
@@ -123,8 +124,7 @@ export default function SettingsPage() {
 
       // update session with new name
       await update({ name: data.name });
-      setProfileSuccess(true);
-
+      toast.success("Profile updated successfully");
       setTimeout(() => setProfileSuccess(false), 3000);
     } catch (error) {
       setProfileError(
@@ -151,9 +151,10 @@ export default function SettingsPage() {
 
       setPasswordSuccess(true);
       passwordForm.reset();
+      toast.success("Password changed successfully");
       setTimeout(() => setPasswordSuccess(false), 3000);
     } catch (error) {
-      setPasswordError(
+      toast.error(
         error instanceof Error ? error.message : "Something went wrong",
       );
     } finally {

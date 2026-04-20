@@ -27,6 +27,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Search, Loader2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface User {
   id: string;
@@ -112,10 +113,13 @@ export default function ManageUsersPage() {
         throw new Error(error.error);
       }
 
+      toast.success(`User role updated to ${newRole}`);
+
       fetchUsers();
     } catch (error) {
-      console.error("Failed to toggle role:", error);
-      alert(error instanceof Error ? error.message : "Something went wrong");
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong",
+      );
     } finally {
       setIsTogglingId(null);
     }
@@ -134,11 +138,14 @@ export default function ManageUsersPage() {
         throw new Error(error.error);
       }
 
+      toast.success("User deleted successfully");
       setDeleteUser(null);
       fetchUsers();
     } catch (error) {
       console.error("Failed to delete user:", error);
-      alert(error instanceof Error ? error.message : "Something went wrong");
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong",
+      );
     } finally {
       setIsDeleting(false);
     }

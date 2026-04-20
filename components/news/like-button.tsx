@@ -20,17 +20,26 @@ export function LikeButton({ postId }: LikeButtonProps) {
 
   // fetch initial like status and count
   useEffect(() => {
+    console.log("likes useEffect fired");
+    let cancelled = false;
+
     async function fetchLikes() {
       try {
         const res = await fetch(`/api/likes?postId=${postId}`);
         const data = await res.json();
-        setLikeCount(data.likeCount);
-        setIsLiked(data.isLiked);
+        if (!cancelled) {
+          setLikeCount(data.likeCount);
+          setIsLiked(data.isLiked);
+        }
       } catch (error) {
         console.error("Error fetching likes:", error);
       }
     }
     fetchLikes();
+
+    return () => {
+      cancelled = true; // ✅ prevent state update on unmount
+    };
   }, [postId]);
 
   async function handleLike() {

@@ -51,12 +51,17 @@ export function CommentsSection({ postId }: CommentsSectionProps) {
 
   // fetch initial comments
   useEffect(() => {
+    console.log("comments useEffect fired");
+    let cancelled = false;
+
     async function fetchComments() {
       try {
         const res = await fetch(`/api/comments?postId=${postId}`);
         const data = await res.json();
-        setComments(data.comments);
-        setNextCursor(data.nextCursor);
+        if (!cancelled) {
+          setComments(data.comments);
+          setNextCursor(data.nextCursor);
+        }
       } catch (error) {
         console.error("Error fetching comments:", error);
       } finally {
@@ -64,6 +69,9 @@ export function CommentsSection({ postId }: CommentsSectionProps) {
       }
     }
     fetchComments();
+    return () => {
+      cancelled = true; // ✅ cleanup
+    };
   }, [postId]);
 
   async function handleLoadMore() {

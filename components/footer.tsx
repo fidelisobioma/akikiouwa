@@ -1,7 +1,7 @@
 import Link from "next/link";
+import { NewsletterForm } from "@/components/news/newsletter-form";
 import { Separator } from "@/components/ui/separator";
-import { NewsletterForm } from "./news/newsletter-form";
-import { getCachedFooterCategories } from "@/lib/cache";
+import prisma from "@/lib/prisma";
 
 const quickLinks = [
   { label: "Home", href: "/" },
@@ -9,11 +9,25 @@ const quickLinks = [
   { label: "Search", href: "/search" },
 ];
 
+async function getCategories() {
+  try {
+    return await prisma.category.findMany({
+      orderBy: { name: "asc" },
+      select: {
+        name: true,
+        slug: true,
+      },
+    });
+  } catch {
+    return []; // ✅ return empty array on error instead of crashing
+  }
+}
+
 export async function Footer() {
-  const categories = await getCachedFooterCategories();
+  const categories = await getCategories();
 
   return (
-    <footer className="z-10 relative bg-muted mt-16 border-t">
+    <footer className="bg-muted/40 mt-16 border-t">
       <div className="mx-auto px-4 py-12 max-w-7xl">
         {/* Top section */}
         <div className="gap-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 mb-10">

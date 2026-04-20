@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import { AuthSessionProvider } from "@/components/session-provider";
 import { Footer } from "@/components/footer";
+import { Toaster } from "sonner";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -73,6 +74,7 @@ export default function RootLayout({
             <Navbar />
             <main className="pt-16">{children}</main>
             <Footer />
+            <Toaster richColors position="top-right" />
           </AuthSessionProvider>
         </ThemeProvider>
       </body>

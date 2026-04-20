@@ -32,6 +32,7 @@ import {
   Loader2,
   ExternalLink,
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Category {
   name: string;
@@ -110,10 +111,15 @@ export default function ManagePostsPage() {
         throw new Error(error.error);
       }
 
+      toast.success(
+        post.published ? "Article unpublished" : "Article published",
+      );
+
       fetchPosts();
     } catch (error) {
-      console.error("Failed to toggle status:", error);
-      alert(error instanceof Error ? error.message : "Something went wrong");
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong",
+      );
     } finally {
       setIsTogglingId(null);
     }
@@ -132,11 +138,13 @@ export default function ManagePostsPage() {
         throw new Error(error.error);
       }
 
+      toast.success("Article deleted successfully");
       setDeleteId(null);
       fetchPosts();
     } catch (error) {
-      console.error("Failed to delete post:", error);
-      alert(error instanceof Error ? error.message : "Something went wrong");
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong",
+      );
     } finally {
       setIsDeleting(false);
     }

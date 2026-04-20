@@ -6,6 +6,7 @@ export function ReadingProgress() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    console.log("reading progress useEffect fired");
     function updateProgress() {
       const scrollY = window.scrollY;
       const documentHeight =
@@ -26,7 +27,7 @@ export function ReadingProgress() {
 
   return (
     <div
-      className="right-0 left-0 z-50 fixed bg-transparent h-[3px]"
+      className="right-0 left-0 z-50 fixed bg-transparent h-0.75"
       style={{ top: "64px" }} // sits directly below navbar
     >
       <div
