@@ -108,7 +108,7 @@ export async function POST(req: Request) {
       data: { name, slug },
     });
 
-    revalidateTag("categories", "pages");
+    revalidateTag("categories", "max");
 
     return NextResponse.json(category, { status: 201 });
   } catch (error) {

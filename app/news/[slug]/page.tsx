@@ -7,10 +7,8 @@ import { LikeButton } from "@/components/news/like-button";
 import { CommentsSection } from "@/components/news/comments-section";
 
 import { ReadingProgress } from "@/components/news/reading-progress";
-// import { Newsletter } from "@/components/news/newsletter";
 import { readingTime, extractFirstImage, toISOString } from "@/lib/utils";
 import { formatDistanceToNow, format } from "date-fns";
-import * as DOMPurify from "isomorphic-dompurify";
 import { MessageSquare } from "lucide-react";
 import type { Metadata } from "next";
 import { ShareButtons } from "@/components/news/share-button";
@@ -111,6 +109,21 @@ export async function generateMetadata({
   };
 }
 
+function sanitizeHtml(html: string): string {
+  return (
+    html
+      // allow iframes from YouTube only
+      .replace(/<iframe(?![^>]*youtube)[^>]*>.*?<\/iframe>/gi, "")
+      // remove script tags
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+      // remove on* event handlers
+      .replace(/\s+on\w+="[^"]*"/gi, "")
+      .replace(/\s+on\w+='[^']*'/gi, "")
+      // remove javascript: links
+      .replace(/href="javascript:[^"]*"/gi, "")
+  );
+}
+
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
   const post = await getPost(slug);
@@ -121,17 +134,7 @@ export default async function ArticlePage({ params }: PageProps) {
     ? await getRelatedPosts(post.category.id, slug)
     : [];
 
-  const sanitizedContent = DOMPurify.sanitize(post.content, {
-    ADD_TAGS: ["iframe"],
-    ADD_ATTR: [
-      "src",
-      "width",
-      "height",
-      "frameborder",
-      "allowfullscreen",
-      "allow",
-    ],
-  });
+  const sanitizedContent = sanitizeHtml(post.content);
 
   const publishDate = new Date(post.publishedAt ?? post.createdAt);
   const articleUrl = `${siteUrl}/news/${post.slug}`;

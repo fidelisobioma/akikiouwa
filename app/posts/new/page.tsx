@@ -7,6 +7,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PostSchema, type PostSchemaType } from "@/lib/schema";
 import { Editor } from "@/components/editor";
+import DOMPurify from "isomorphic-dompurify";
 import { ActionBar } from "@/components/post/action-bar";
 import { PostSidebar } from "@/components/post/post-sidebar";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,6 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import DOMPurify from "dompurify";
 import { toast } from "sonner";
 
 export default function NewPostPage() {

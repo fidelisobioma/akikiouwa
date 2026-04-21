@@ -36,8 +36,8 @@ export async function GET(
         },
       },
     });
-    revalidateTag("posts", "max");
 
+    revalidateTag("posts", "max");
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
