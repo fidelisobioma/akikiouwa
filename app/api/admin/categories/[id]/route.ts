@@ -72,7 +72,7 @@ export async function PATCH(
       data: { name },
     });
 
-    revalidateTag("categories", "pages");
+    revalidateTag("categories", "max");
     return NextResponse.json(category, { status: 200 });
   } catch (error) {
     console.error("Error updating category:", error);
@@ -146,7 +146,7 @@ export async function DELETE(
     await prisma.category.delete({
       where: { id },
     });
-    revalidateTag("categories", "pages");
+    revalidateTag("categories", "max");
 
     return NextResponse.json(
       {

@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       },
     });
 
-    revalidateTag("posts", "pages");
+    revalidateTag("posts", "max");
 
     return NextResponse.json(post, { status: 201 });
   } catch (error) {

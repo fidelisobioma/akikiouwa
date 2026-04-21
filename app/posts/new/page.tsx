@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
@@ -79,9 +79,7 @@ export default function NewPostPage() {
     }
 
     const values = form.getValues();
-    // trigger zod validation
     const isValid = await form.trigger();
-
     if (!isValid) return;
 
     setIsLoading(true);
@@ -106,17 +104,19 @@ export default function NewPostPage() {
       const post = await res.json();
 
       localStorage.removeItem(DRAFT_KEY);
+      isDirtyRef.current = false;
+
+      toast.success(
+        published
+          ? "Article published successfully"
+          : "Draft saved successfully",
+      );
 
       if (published) {
         router.push(`/news/${post.slug}`);
       } else {
         router.push("/posts/manage");
       }
-      toast.success(
-        published
-          ? "Article published successfully"
-          : "Draft saved successfully",
-      );
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -138,8 +138,11 @@ export default function NewPostPage() {
     return () => subscription.unsubscribe();
   }, [form]);
 
+  const isDirtyRef = useRef(true);
+
   useEffect(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
+      if (!isDirtyRef.current) return;
       const values = form.getValues();
       if (values.title || values.content) {
         e.preventDefault();

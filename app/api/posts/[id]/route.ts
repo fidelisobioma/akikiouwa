@@ -36,7 +36,7 @@ export async function GET(
         },
       },
     });
-    revalidateTag("posts", "pages");
+    revalidateTag("posts", "max");
 
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
@@ -169,7 +169,7 @@ export async function DELETE(
     await prisma.post.delete({
       where: { id },
     });
-    revalidateTag("posts", "pages");
+    revalidateTag("posts", "max");
 
     return NextResponse.json(
       { message: "Post deleted successfully" },
@@ -226,7 +226,7 @@ export async function PUT(
         publishedAt: published ? (existing.publishedAt ?? new Date()) : null,
       },
     });
-    revalidateTag("posts", "pages");
+    revalidateTag("posts", "max");
 
     return NextResponse.json(post, { status: 200 });
   } catch (error) {

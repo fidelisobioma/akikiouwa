@@ -10,7 +10,7 @@ import { ReadingProgress } from "@/components/news/reading-progress";
 // import { Newsletter } from "@/components/news/newsletter";
 import { readingTime, extractFirstImage, toISOString } from "@/lib/utils";
 import { formatDistanceToNow, format } from "date-fns";
-import DOMPurify from "isomorphic-dompurify";
+import * as DOMPurify from "isomorphic-dompurify";
 import { MessageSquare } from "lucide-react";
 import type { Metadata } from "next";
 import { ShareButtons } from "@/components/news/share-button";

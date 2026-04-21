@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -99,6 +99,8 @@ export default function EditPostPage() {
 
       const post = await res.json();
 
+      isDirtyRef.current = false;
+
       if (published) {
         router.push(`/news/${post.slug}`);
       } else {
@@ -123,6 +125,21 @@ export default function EditPostPage() {
 
   const watchedContent = form.watch("content");
   const watchedTitle = form.watch("title");
+
+  const isDirtyRef = useRef(true);
+  useEffect(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      if (!isDirtyRef.current) return;
+      const values = form.getValues();
+      if (values.title || values.content) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [form]);
 
   // show loading state while fetching post
   if (isFetching) {
