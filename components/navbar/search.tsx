@@ -6,7 +6,11 @@ import { Search as SearchIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export function Search() {
+interface SearchProps {
+  onOpenChange?: (open: boolean) => void;
+}
+
+export function Search({ onOpenChange }: SearchProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -16,9 +20,9 @@ export function Search() {
     if (isOpen) {
       inputRef.current?.focus();
     }
-  }, [isOpen]);
+    onOpenChange?.(isOpen); // ✅ notify parent
+  }, [isOpen, onOpenChange]);
 
-  // close on escape key
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
@@ -42,13 +46,13 @@ export function Search() {
   return (
     <div className="flex items-center">
       {isOpen ? (
-        <form onSubmit={handleSearch} className="flex items-center gap-2">
+        <form onSubmit={handleSearch} className="flex items-center gap-1">
           <Input
             ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search articles..."
-            className="w-32 md:w-48 h-8 text-sm"
+            placeholder="Search..."
+            className="w-32 sm:w-48 h-8 text-sm"
           />
           <Button
             type="button"
