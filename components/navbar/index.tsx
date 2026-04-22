@@ -23,7 +23,7 @@ export async function Navbar() {
     <header className="top-0 right-0 left-0 z-50 fixed bg-background/95 supports-backdrop-filter:bg-background/60 backdrop-blur border-b h-16">
       <div className="flex justify-between items-center gap-4 mx-auto px-4 max-w-7xl h-full">
         {/* Left — logo + mobile menu */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <MobileNav categories={categories} />
           <Link
             href="/"
@@ -37,7 +37,7 @@ export async function Navbar() {
         <CategoryNav categories={categories} />
 
         {/* Right — search, dark mode, auth */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 shrink-0">
           <Search />
           <ThemeToggle />
           <AuthStatus />

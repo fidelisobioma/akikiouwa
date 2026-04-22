@@ -48,13 +48,13 @@ export function Search() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search articles..."
-            className="w-48 h-8 text-sm"
+            className="w-32 md:w-48 h-8 text-sm"
           />
           <Button
             type="button"
             variant="ghost"
             size="icon"
-            className="w-8 h-8"
+            className="w-8 h-8 shrink-0"
             onClick={() => {
               setIsOpen(false);
               setQuery("");
